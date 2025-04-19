@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "brewster-product-template",
+      "settings": {
+        "show_quantity_selector": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

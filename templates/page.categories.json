@@ -1,0 +1,90 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "product_categories": {
+      "type": "brewster-product-grid",
+      "blocks": {
+        "category_1": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Beer",
+            "category_link": "/collections/beer"
+          }
+        },
+        "category_2": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Rum",
+            "category_link": "/collections/rum"
+          }
+        },
+        "category_3": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Wine",
+            "category_link": "/collections/wine"
+          }
+        },
+        "category_4": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Whisky",
+            "category_link": "/collections/whisky"
+          }
+        },
+        "category_5": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Vodka",
+            "category_link": "/collections/vodka"
+          }
+        },
+        "category_6": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Tequila",
+            "category_link": "/collections/tequila"
+          }
+        },
+        "category_7": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Deli",
+            "category_link": "/collections/deli"
+          }
+        },
+        "category_8": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Deli Sandwiches",
+            "category_link": "/collections/deli-sandwiches"
+          }
+        }
+      },
+      "block_order": [
+        "category_1", 
+        "category_2", 
+        "category_3", 
+        "category_4",
+        "category_5", 
+        "category_6", 
+        "category_7", 
+        "category_8"
+      ],
+      "settings": {
+        "title": "Explore Our Categories"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "product_categories"
+  ]
+} 
+ 

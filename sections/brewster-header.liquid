@@ -1,0 +1,144 @@
+{{ 'brewster-custom.css' | asset_url | stylesheet_tag }}
+{{ 'brewster-custom.js' | asset_url | script_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<header class="header">
+  <a href="/" class="logo">BREWSTER VILLAGE<br>MARKETPLACE</a>
+  <div class="mobile-menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <nav class="nav">
+    <a href="/collections/all" class="nav-link {% if template == 'collection' %}active{% endif %}">Shop</a>
+    <a href="/pages/deli" class="nav-link {% if template == 'page' and page.handle == 'deli' %}active{% endif %}">Deli</a>
+    <a href="/#about_us" class="nav-link">About</a>
+    <a href="/#visit_us" class="nav-link">Visit</a>
+    <a href="/pages/contact" class="nav-link {% if template == 'page' and page.handle == 'contact' %}active{% endif %}">Contact</a>
+    <a href="{{ routes.cart_url }}" class="nav-link cart-link">
+      <span class="cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="cart-count">{{ cart.item_count }}</span>
+      </span>
+      <span class="cart-text">Cart</span>
+    </a>
+  </nav>
+</header>
+
+<style>
+  .nav-link.active {
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  
+  .cart-icon {
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  
+  .cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #e63946;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 1px 6px;
+    border-radius: 50%;
+  }
+  
+  @media (max-width: 767px) {
+    .cart-text {
+      display: none;
+    }
+    
+    .cart-icon {
+      margin-right: 0;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle functionality
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const nav = document.querySelector('.nav');
+    
+    if (mobileMenuToggle && nav) {
+      mobileMenuToggle.addEventListener('click', function() {
+        nav.classList.toggle('nav-active');
+        this.classList.toggle('active');
+      });
+    }
+    
+    // Improved scroll detection for header
+    let lastScrollPosition = 0;
+    const header = document.querySelector('.header');
+    
+    function handleScroll() {
+      const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Add or remove 'scrolled' class based on scroll position
+      if (currentScrollPosition > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      
+      // Store the last scroll position
+      lastScrollPosition = currentScrollPosition;
+    }
+    
+    // Listen for scroll events with throttling for better performance
+    let scrollTimer;
+    window.addEventListener('scroll', function() {
+      if (!scrollTimer) {
+        scrollTimer = setTimeout(function() {
+          handleScroll();
+          scrollTimer = null;
+        }, 10);
+      }
+    }, { passive: true });
+    
+    // Initialize header state on page load
+    handleScroll();
+    
+    // Smooth scroll to anchor
+    document.querySelectorAll('a[href^="/#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(2);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        } else {
+          window.location.href = '/' + this.getAttribute('href').substring(1);
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Brewster Header",
+  "tag": "section",
+  "class": "section section-header",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Brewster Header"
+    }
+  ]
+}
+{% endschema %} 

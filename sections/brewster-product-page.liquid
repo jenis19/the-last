@@ -1,0 +1,417 @@
+{{ 'brewster-product-page.css' | asset_url | stylesheet_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+{%- style -%}
+  .brewster-product-page {
+    padding: 50px 0;
+  }
+{%- endstyle -%}
+
+<div class="brewster-product-page">
+  {% if section.settings.title != blank %}
+    <h2 class="section-title">{{ section.settings.title }}</h2>
+  {% endif %}
+  
+  {% render 'category-navigation' %}
+  
+  <div class="shop-page">
+    <!-- Sidebar with filters -->
+    <div class="sidebar">
+      <h2>Categories</h2>
+      <ul class="filter-list">
+        <li>
+          <label class="checkbox-label">
+            <input type="checkbox" class="category-filter" data-category="all" checked>
+            <span class="checkbox-custom"></span>
+            All Products
+          </label>
+        </li>
+        {% for link in linklists.main-menu.links %}
+          {% if link.links.size > 0 %}
+            {% for childlink in link.links %}
+              {% if childlink.url contains '/collections/' %}
+                <li>
+                  <label class="checkbox-label">
+                    <input type="checkbox" class="category-filter" data-category="{{ childlink.url | split: '/collections/' | last }}">
+                    <span class="checkbox-custom"></span>
+                    {{ childlink.title }}
+                  </label>
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% elsif link.url contains '/collections/' %}
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox" class="category-filter" data-category="{{ link.url | split: '/collections/' | last }}">
+                <span class="checkbox-custom"></span>
+                {{ link.title }}
+              </label>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      
+      <!-- Hardcoded categories as fallback -->
+      {% if linklists.main-menu.links.size == 0 %}
+        <ul class="filter-list">
+          <li>
+            <label class="checkbox-label">
+              <input type="checkbox" class="category-filter" data-category="beer">
+              <span class="checkbox-custom"></span>
+              Beer
+            </label>
+          </li>
+          <li>
+            <label class="checkbox-label">
+              <input type="checkbox" class="category-filter" data-category="wine">
+              <span class="checkbox-custom"></span>
+              Wine
+            </label>
+          </li>
+          <li>
+            <label class="checkbox-label">
+              <input type="checkbox" class="category-filter" data-category="spirits">
+              <span class="checkbox-custom"></span>
+              Spirits
+            </label>
+          </li>
+          <li>
+            <label class="checkbox-label">
+              <input type="checkbox" class="category-filter" data-category="deli">
+              <span class="checkbox-custom"></span>
+              Deli
+            </label>
+          </li>
+        </ul>
+      {% endif %}
+      
+      <h2>Price</h2>
+      <div class="price-filter">
+        <div class="price-range">
+          <span class="min-price">$0</span>
+          <span class="max-price">$500</span>
+        </div>
+        <input type="range" min="0" max="500" value="500" class="price-slider" id="price-slider">
+        <button class="filter-btn" id="filter-button">Apply Filter</button>
+      </div>
+    </div>
+    
+    <!-- Product Grid -->
+    <div class="product-grid">
+      {% assign products_to_show = section.settings.products_per_page | default: 12 | times: 1 %}
+      {% paginate collections.all.products by products_to_show %}
+        {% for product in collections.all.products %}
+          {% assign product_price = product.price | divided_by: 100.0 %}
+          {% assign product_category = product.collections | map: 'handle' | join: ' ' %}
+          <div class="product-card" data-price="{{ product_price }}" data-categories="{{ product_category }}">
+            <a href="{{ product.url }}" class="product-link">
+              <div class="product-image-container">
+                <div class="product-image">
+                  {% if product.featured_image != blank %}
+                    <img 
+                      src="{{ product.featured_image | img_url: '400x400' }}" 
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                      class="product-image-element">
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'product-image placeholder' }}
+                  {% endif %}
+                </div>
+              </div>
+              <h3 class="product-title">{{ product.title }}</h3>
+              <div class="product-price">
+                {% if product.compare_at_price > product.price %}
+                  <s class="compare-price">${{ product.compare_at_price | divided_by: 100.0 }}</s>
+                {% endif %}
+                ${{ product_price }}
+              </div>
+            </a>
+            <form method="post" action="/cart/add" class="product-form">
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button type="submit" class="add-to-cart-button" {% unless product.available %}disabled{% endunless %}>
+                {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+              </button>
+            </form>
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <p>No products found. Please check back soon!</p>
+          </div>
+        {% endfor %}
+        
+        {% if paginate.pages > 1 %}
+          <div class="pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const priceSlider = document.getElementById('price-slider');
+    const minPriceDisplay = document.querySelector('.min-price');
+    const maxPriceDisplay = document.querySelector('.max-price');
+    const filterButton = document.getElementById('filter-button');
+    const categoryCheckboxes = document.querySelectorAll('.category-filter');
+    const productCards = document.querySelectorAll('.product-card');
+    
+    // Initialize max price value display
+    maxPriceDisplay.textContent = '$' + priceSlider.value;
+    
+    // Set the "All" checkbox to checked by default
+    const allCategoryCheckbox = document.querySelector('.category-filter[data-category="all"]');
+    if (allCategoryCheckbox) {
+      allCategoryCheckbox.checked = true;
+    }
+    
+    // Handle "All" checkbox
+    categoryCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        if (this.getAttribute('data-category') === 'all' && this.checked) {
+          // Uncheck all other categories when "All" is checked
+          categoryCheckboxes.forEach(cb => {
+            if (cb.getAttribute('data-category') !== 'all') {
+              cb.checked = false;
+            }
+          });
+        } else if (this.checked) {
+          // Uncheck "All" when any other category is checked
+          if (allCategoryCheckbox) {
+            allCategoryCheckbox.checked = false;
+          }
+        }
+        
+        // If no category is checked, check "All"
+        let anyChecked = false;
+        categoryCheckboxes.forEach(cb => {
+          if (cb.checked) anyChecked = true;
+        });
+        
+        if (!anyChecked && allCategoryCheckbox) {
+          allCategoryCheckbox.checked = true;
+        }
+        
+        // Apply filters immediately when category changes
+        applyFilters();
+      });
+    });
+    
+    // Update price display when slider moves
+    priceSlider.addEventListener('input', function() {
+      maxPriceDisplay.textContent = '$' + this.value;
+    });
+    
+    // Also filter on price slider change (optional, smoother experience)
+    priceSlider.addEventListener('input', debounce(applyFilters, 300));
+    
+    // Apply filters when button is clicked
+    filterButton.addEventListener('click', applyFilters);
+    
+    // Function to apply all filters
+    function applyFilters() {
+      const maxPrice = parseInt(priceSlider.value);
+      
+      // Get selected categories
+      const selectedCategories = [];
+      let allSelected = false;
+      
+      categoryCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          const category = checkbox.getAttribute('data-category');
+          if (category === 'all') {
+            allSelected = true;
+          } else {
+            selectedCategories.push(category);
+          }
+        }
+      });
+      
+      // Count visible and hidden products
+      let visibleCount = 0;
+      let hiddenCount = 0;
+      
+      // Filter products
+      productCards.forEach(card => {
+        const price = parseFloat(card.getAttribute('data-price')) || 0;
+        const categories = card.getAttribute('data-categories') ? card.getAttribute('data-categories').split(' ') : [];
+        
+        let categoryMatch = allSelected; // If "All" is selected, all products match
+        
+        // Check if product matches any selected category
+        if (!allSelected && selectedCategories.length > 0) {
+          for (const category of categories) {
+            if (selectedCategories.includes(category)) {
+              categoryMatch = true;
+              break;
+            }
+          }
+        }
+        
+        // Show/hide based on both filters
+        if (price <= maxPrice && categoryMatch) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+          hiddenCount++;
+        }
+      });
+      
+      // If no products are visible after filtering, show message
+      const emptyState = document.querySelector('.empty-state');
+      
+      if (visibleCount === 0 && !emptyState) {
+        const noResultsDiv = document.createElement('div');
+        noResultsDiv.className = 'empty-state';
+        noResultsDiv.innerHTML = '<p>No products match your filter criteria. Try adjusting your filters.</p>';
+        
+        // Add it after the last product card
+        const productGrid = document.querySelector('.product-grid');
+        if (productGrid) {
+          productGrid.appendChild(noResultsDiv);
+        }
+      } else if (visibleCount > 0) {
+        // Remove no results message if it exists and products are visible
+        const existingNoResults = document.querySelector('.empty-state:not(:first-child)');
+        if (existingNoResults) {
+          existingNoResults.remove();
+        }
+      }
+    }
+    
+    // Helper function to debounce frequent events
+    function debounce(func, wait) {
+      let timeout;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          func.apply(context, args);
+        }, wait);
+      };
+    }
+    
+    // Apply filters on page load
+    applyFilters();
+    
+    // Make sure images are uniformly sized
+    const productImages = document.querySelectorAll('.product-image-element');
+    productImages.forEach(img => {
+      img.onload = function() {
+        this.style.maxWidth = '80%';
+        this.style.maxHeight = '80%';
+        this.style.margin = '0 auto';
+        this.style.display = 'block';
+      };
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Title",
+      "default": "Our Products"
+    },
+    {
+      "type": "select",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "options": [
+        {
+          "value": "12",
+          "label": "12 products"
+        },
+        {
+          "value": "24",
+          "label": "24 products"
+        },
+        {
+          "value": "36",
+          "label": "36 products"
+        }
+      ],
+      "default": "12"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Page",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', function() {
+  const priceSlider = document.getElementById('price-slider');
+  const minPriceDisplay = document.querySelector('.min-price');
+  const maxPriceDisplay = document.querySelector('.max-price');
+  const filterButton = document.getElementById('filter-button');
+  const categoryCheckboxes = document.querySelectorAll('.category-filter');
+  const productCards = document.querySelectorAll('.product-card');
+  
+  // Update price display when slider moves
+  priceSlider.addEventListener('input', function() {
+    maxPriceDisplay.textContent = '$' + this.value;
+  });
+  
+  // Apply filters when button is clicked
+  filterButton.addEventListener('click', function() {
+    const maxPrice = parseInt(priceSlider.value);
+    
+    // Get selected categories
+    const selectedCategories = [];
+    let allSelected = false;
+    
+    categoryCheckboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        const category = checkbox.getAttribute('data-category');
+        if (category === 'all') {
+          allSelected = true;
+        } else {
+          selectedCategories.push(category);
+        }
+      }
+    });
+    
+    // Filter products
+    productCards.forEach(card => {
+      const price = parseFloat(card.getAttribute('data-price'));
+      const categories = card.getAttribute('data-categories').split(' ');
+      
+      let categoryMatch = allSelected; // If "All" is selected, all products match
+      
+      // Check if product matches any selected category
+      if (!allSelected && selectedCategories.length > 0) {
+        for (const category of categories) {
+          if (selectedCategories.includes(category)) {
+            categoryMatch = true;
+            break;
+          }
+        }
+      }
+      
+      // Show/hide based on both filters
+      if (price <= maxPrice && categoryMatch) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+{% endjavascript %} 

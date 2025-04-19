@@ -1,0 +1,79 @@
+{%- style -%}
+.hero {
+  background-image: url('{{ section.settings.background_image | image_url: width: 1500 }}');
+}
+{%- endstyle -%}
+
+<section class="hero">
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>{{ section.settings.heading }}</h1>
+    <p>{{ section.settings.subheading }}</p>
+    <div class="hero-buttons">
+      {% if section.settings.button_label_1 != blank %}
+        <a href="{{ section.settings.button_link_1 }}" class="btn">{{ section.settings.button_label_1 }}</a>
+      {% endif %}
+      {% if section.settings.button_label_2 != blank %}
+        <a href="{{ section.settings.button_link_2 }}" class="btn">{{ section.settings.button_label_2 }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brewster Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to Brewster Village Marketplace"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Your Local Spot for Beer, Wine, Deli & More"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "First Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "First Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Second Button Label",
+      "default": "View Deli Menu"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Second Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brewster Hero",
+      "settings": {
+        "heading": "Welcome to Brewster Village Marketplace",
+        "subheading": "Your Local Spot for Beer, Wine, Deli & More"
+      }
+    }
+  ]
+}
+{% endschema %} 

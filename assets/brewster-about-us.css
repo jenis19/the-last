@@ -1,0 +1,176 @@
+/* About Us Section Styles */
+.about-us-section {
+    display: flex;
+    flex-direction: row;
+    background-color: #fdfbf8;
+    padding: 100px 0 80px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+}
+
+.about-us-section .about-image-block,
+.about-us-section .about-text-block {
+    padding: 0 40px;
+}
+
+.about-us-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background-color: #a87c3f;
+}
+
+.about-image-block {
+    width: 50%;
+    position: relative;
+}
+
+.about-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transition: transform 0.5s ease;
+}
+
+.about-image:hover {
+    transform: scale(1.02);
+}
+
+.image-caption {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #666;
+    margin-top: 12px;
+    text-align: center;
+}
+
+.about-text-block {
+    width: 50%;
+}
+
+.about-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #111111;
+    margin-bottom: 30px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    position: relative;
+}
+
+.about-text-content {
+    margin-bottom: 30px;
+}
+
+.about-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.about-text:last-of-type {
+    margin-bottom: 0;
+}
+
+.about-signature {
+    margin-top: 30px;
+    border-top: 1px solid rgba(168, 124, 63, 0.2);
+    padding-top: 20px;
+}
+
+.signature-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #a87c3f;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.signature-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: #333;
+    text-align: right;
+}
+
+.about-cta {
+    margin-top: 35px;
+}
+
+.about-cta-button {
+    display: inline-block;
+    background-color: #a87c3f;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+}
+
+.about-cta-button:hover {
+    background-color: #8e6935;
+    box-shadow: 0 4px 12px rgba(168, 124, 63, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .about-us-section {
+        flex-direction: column;
+        padding: 70px 0 60px;
+        gap: 40px;
+    }
+    
+    .about-image-block {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .about-text-block {
+        width: 100%;
+    }
+    
+    .about-heading {
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .about-text {
+        max-width: 100%;
+        text-align: center;
+        margin-bottom: 16px;
+    }
+    
+    .signature-text {
+        text-align: center;
+    }
+    
+    .signature-name {
+        text-align: center;
+    }
+    
+    .about-cta {
+        text-align: center;
+    }
+} 

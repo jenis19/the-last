@@ -1,0 +1,94 @@
+{{ 'brewster-category.css' | asset_url | stylesheet_tag }}
+
+<section class="section category-page">
+  <h2 class="page-title">{{ section.settings.title }}</h2>
+  
+  <div class="category-grid">
+    {% for block in section.blocks %}
+      {% if block.type == 'category_item' %}
+        <a href="{{ block.settings.category_link }}" class="category-card">
+          <div class="category-image">
+            {% if block.settings.category_image != blank %}
+              {{ block.settings.category_image | image_url: width: 500 | image_tag: loading: 'lazy', alt: block.settings.category_name }}
+            {% else %}
+              {{ 'product-placeholder.png' | asset_url | image_tag: loading: 'lazy', alt: block.settings.category_name }}
+            {% endif %}
+          </div>
+          <h3 class="category-label">{{ block.settings.category_name }}</h3>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Categories",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Shop By Category"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Category Item",
+      "type": "category_item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "category_name",
+          "label": "Category Name",
+          "default": "Category Name"
+        },
+        {
+          "type": "image_picker",
+          "id": "category_image",
+          "label": "Category Image"
+        },
+        {
+          "type": "url",
+          "id": "category_link",
+          "label": "Category Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Categories",
+      "blocks": [
+        {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Beer & Wine"
+          }
+        },
+        {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Deli Items"
+          }
+        },
+        {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Fresh Produce"
+          }
+        },
+        {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Specialty Goods"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 
+ 

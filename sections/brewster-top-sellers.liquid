@@ -1,0 +1,100 @@
+{{ 'brewster-top-sellers.css' | asset_url | stylesheet_tag }}
+
+<section class="section top-sellers-section">
+  <h2 class="section-title">{{ section.settings.title }}</h2>
+  {% if section.settings.subtitle != blank %}
+    <p class="section-subtitle">{{ section.settings.subtitle }}</p>
+  {% endif %}
+  
+  <div class="product-carousel">
+    <div class="product-grid">
+      {%- for product in collections[section.settings.collection].products limit: 4 -%}
+        <div class="product-card">
+          {% if product.compare_at_price > product.price %}
+            <div class="product-badge">Sale</div>
+          {% endif %}
+          
+          <div class="product-image-wrapper">
+            <a href="{{ product.url | within: collection }}" class="product-link">
+              {% if product.featured_media != blank %}
+                <img
+                  class="product-image"
+                  src="{{ product.featured_media | img_url: '600x600', crop: 'center' }}"
+                  alt="{{ product.featured_media.alt | escape }}"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'product-image placeholder' }}
+              {% endif %}
+            </a>
+          </div>
+          
+          <div class="product-info">
+            <a href="{{ product.url | within: collection }}" class="product-link">
+              <h3 class="product-title">{{ product.title }}</h3>
+            </a>
+            
+            <div class="product-price">
+              {% if product.compare_at_price > product.price %}
+                <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                <s class="product-old-price">{{ product.compare_at_price | money }}</s>
+                <span class="product-current-price">{{ product.price | money }}</span>
+              {% else %}
+                <span class="product-current-price">{{ product.price | money }}</span>
+              {% endif %}
+            </div>
+            
+            {%- assign product_form_id = 'product-form-' | append: section.id | append: product.id -%}
+            
+            <form method="post" action="{{ routes.cart_add_url }}" id="{{ product_form_id }}" accept-charset="UTF-8" class="form">
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <input type="hidden" name="quantity" value="1">
+              
+              <button type="submit" name="add" class="add-to-cart-button">
+                <span>{{ 'products.product.add_to_cart' | t }}</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Top Sellers",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Top Sellers",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "default": "Shop our most popular products",
+      "label": "Subtitle"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Sellers",
+      "settings": {
+        "title": "Top Sellers",
+        "subtitle": "Shop our most popular products"
+      }
+    }
+  ]
+}
+{% endschema %} 

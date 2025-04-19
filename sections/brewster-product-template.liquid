@@ -1,0 +1,262 @@
+{{ 'brewster-product-detail.css' | asset_url | stylesheet_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<section class="product-page">
+  <!-- Left Column - Product Image -->
+  <div class="product-image-container">
+    <div style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); position: relative; min-height: 400px;">
+      <!-- Loading indicator shown while image loads -->
+      <div id="loading-indicator" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ffffff;">
+        <div style="text-align: center;">
+          <div style="width: 40px; height: 40px; border: 3px solid #f3f3f3; border-top: 3px solid #a87c3f; border-radius: 50%; margin: 0 auto 15px; animation: spin 1s linear infinite;"></div>
+          <div style="color: #a87c3f; font-family: var(--font-body);">Loading product image...</div>
+        </div>
+      </div>
+      
+      {% if product.featured_image != blank %}
+        <img 
+          src="{{ product.featured_image | img_url: '800x', crop: 'center' }}" 
+          alt="{{ product.title | escape }}"
+          class="product-main-image"
+          id="main-product-image"
+          onload="document.getElementById('loading-indicator').style.display = 'none';"
+          onerror="this.onerror=null; document.getElementById('loading-indicator').style.display = 'none'; this.src='{{ 'product-1' | placeholder_img_url: '800x' }}';">
+      {% else %}
+        <img 
+          src="{{ 'product-1' | placeholder_img_url: '800x' }}" 
+          alt="{{ product.title | escape }}" 
+          class="product-main-image"
+          id="main-product-image"
+          onload="document.getElementById('loading-indicator').style.display = 'none';">
+      {% endif %}
+    </div>
+    
+    <div class="image-thumbnails">
+      {% if product.images.size > 1 %}
+        {% for image in product.images limit: 4 %}
+          <div class="thumbnail-wrapper {% if forloop.first %}active{% endif %}" data-full-image="{{ image | img_url: '800x', crop: 'center' }}">
+            <img 
+              src="{{ image | img_url: '200x200', crop: 'center' }}" 
+              alt="{{ image.alt | default: product.title | escape }}"
+              class="image-thumbnail"
+              onerror="this.onerror=null; this.src='{{ 'product-1' | placeholder_img_url: '150x150' }}';">
+          </div>
+        {% endfor %}
+      {% elsif product.featured_image != blank %}
+        <div class="thumbnail-wrapper active" data-full-image="{{ product.featured_image | img_url: '800x', crop: 'center' }}">
+          <img 
+            src="{{ product.featured_image | img_url: '200x200', crop: 'center' }}" 
+            alt="{{ product.title | escape }}"
+            class="image-thumbnail"
+            onerror="this.onerror=null; this.src='{{ 'product-1' | placeholder_img_url: '150x150' }}';">
+        </div>
+      {% else %}
+        <div class="thumbnail-wrapper active">
+          <img 
+            src="{{ 'product-1' | placeholder_img_url: '150x150' }}" 
+            alt="Thumbnail"
+            class="image-thumbnail">
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <!-- Right Column - Product Info -->
+  <div class="product-info">
+    <h1 class="product-title">{{ product.title }}</h1>
+    
+    <div class="product-price">
+      {% if product.compare_at_price > product.price %}
+        <span class="compare-price">${{ product.compare_at_price | money_without_currency }}</span>
+      {% endif %}
+      <span class="current-price">${{ product.price | money_without_currency }}</span>
+    </div>
+    
+    {% if product.available %}
+      <div class="stock-status">
+        <span class="in-stock-dot"></span>
+        <span class="stock-text">In Stock</span>
+      </div>
+    {% else %}
+      <div class="stock-status">
+        <span class="stock-text" style="color: #999;">Out of Stock</span>
+      </div>
+    {% endif %}
+    
+    {% if product.description != blank %}
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+    {% endif %}
+    
+    <div class="product-meta">
+      {% if product.metafields.custom.alcohol_content %}
+        <div class="meta-item">
+          <span class="meta-label">ABV</span>
+          <span class="meta-value">{{ product.metafields.custom.alcohol_content }}%</span>
+        </div>
+      {% endif %}
+      
+      {% if product.metafields.custom.volume %}
+        <div class="meta-item">
+          <span class="meta-label">Volume</span>
+          <span class="meta-value">{{ product.metafields.custom.volume }}</span>
+        </div>
+      {% endif %}
+      
+      {% if product.metafields.custom.origin %}
+        <div class="meta-item">
+          <span class="meta-label">Origin</span>
+          <span class="meta-value">{{ product.metafields.custom.origin }}</span>
+        </div>
+      {% endif %}
+      
+      {% if product.metafields.custom.type %}
+        <div class="meta-item">
+          <span class="meta-label">Type</span>
+          <span class="meta-value">{{ product.metafields.custom.type }}</span>
+        </div>
+      {% endif %}
+    </div>
+    
+    {% form 'product', product, class: 'product-form', id: 'product-form' %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      
+      <button type="submit" class="add-to-cart-button" {% unless product.available %}disabled{% endunless %}>
+        {% if product.available %}
+          Add to Cart
+        {% else %}
+          Sold Out
+        {% endif %}
+      </button>
+    {% endform %}
+    
+    {% if section.settings.show_share_buttons %}
+      <div class="product-share">
+        <span class="share-label">Share:</span>
+        <div class="share-icons">
+          <a href="https://www.facebook.com/sharer.php?u={{ shop.url }}{{ product.url }}" target="_blank" class="share-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+          <a href="https://twitter.com/intent/tweet?text={{ product.title | url_encode }}&url={{ shop.url }}{{ product.url }}" target="_blank" class="share-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+            </svg>
+          </a>
+          <a href="https://pinterest.com/pin/create/button/?url={{ shop.url }}{{ product.url }}&media={{ product.featured_image | img_url: 'large' }}&description={{ product.title | url_encode }}" target="_blank" class="share-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 0 0-3.16 19.5c-.07-.7-.12-1.81.03-2.6.14-.7.9-4.4.9-4.4s-.23-.46-.23-1.14c0-1.06.62-1.85 1.38-1.85.65 0 .96.49.96 1.08 0 .65-.42 1.64-.63 2.56-.18.75.38 1.37 1.12 1.37 1.35 0 2.38-1.42 2.38-3.48 0-1.82-1.3-3.09-3.16-3.09a3.3 3.3 0 0 0-3.47 3.32c0 .66.27 1.37.6 1.76.07.08.08.15.06.24-.06.25-.2.79-.22.9-.04.14-.12.17-.27.1-1-.47-1.63-1.95-1.63-3.14 0-2.4 1.74-4.6 5-4.6 2.63 0 4.67 1.88 4.67 4.4 0 2.63-1.66 4.75-3.96 4.75-.77 0-1.5-.4-1.75-.88 0 0-.38 1.47-.48 1.84-.17.68-.67 1.53-1 2.05A10 10 0 1 0 12 2z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Gallery functionality with reliable image switching
+    const mainImage = document.getElementById('main-product-image');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const thumbnailWrappers = document.querySelectorAll('.thumbnail-wrapper');
+    
+    // Force images to load properly
+    function forceImageRefresh(img) {
+      const currentSrc = img.src;
+      if (currentSrc.indexOf('?') >= 0) {
+        img.src = currentSrc + '&t=' + new Date().getTime();
+      } else {
+        img.src = currentSrc + '?t=' + new Date().getTime();
+      }
+    }
+    
+    // Try to force all images to load
+    const allImages = document.querySelectorAll('img');
+    allImages.forEach(img => {
+      if (!img.complete) {
+        forceImageRefresh(img);
+      }
+    });
+    
+    // Handle thumbnail clicks
+    thumbnailWrappers.forEach(wrapper => {
+      wrapper.addEventListener('click', function() {
+        const fullImageUrl = this.getAttribute('data-full-image');
+        
+        if (fullImageUrl && mainImage) {
+          // Show loading indicator
+          if (loadingIndicator) loadingIndicator.style.display = 'flex';
+          
+          // Set new image source
+          mainImage.src = fullImageUrl;
+          
+          // On image load, hide loading indicator
+          mainImage.onload = function() {
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+          };
+          
+          // On image error, use placeholder
+          mainImage.onerror = function() {
+            this.onerror = null;
+            this.src = '{{ 'product-1' | placeholder_img_url: '800x' }}';
+            if (loadingIndicator) loadingIndicator.style.display = 'none';
+          };
+          
+          // Update active state
+          thumbnailWrappers.forEach(w => w.classList.remove('active'));
+          this.classList.add('active');
+        }
+      });
+    });
+    
+    // Fallback in case images still fail to load after a certain time
+    setTimeout(function() {
+      if (mainImage && !mainImage.complete) {
+        mainImage.src = '{{ 'product-1' | placeholder_img_url: '800x' }}';
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+      }
+      
+      document.querySelectorAll('.image-thumbnail').forEach(thumb => {
+        if (!thumb.complete) {
+          thumb.src = '{{ 'product-1' | placeholder_img_url: '150x150' }}';
+        }
+      });
+    }, 3000);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Template",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show quantity selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social sharing buttons",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Template",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %} 

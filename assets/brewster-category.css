@@ -1,0 +1,127 @@
+/* Category Page Styles - Updated for Mobile View */
+.category-page {
+    background-color: #f9f7f2; /* Soft beige */
+    padding: 60px 20px;
+    min-height: 100vh;
+    color: #222;
+}
+
+.category-page.background-white {
+    background-color: #fff;
+}
+
+.category-page.background-light-gray {
+    background-color: #f5f5f5;
+}
+
+.page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #222;
+    padding-top: 60px; /* Account for fixed header */
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.category-image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Force 1:1 aspect ratio */
+    overflow: hidden;
+}
+
+.category-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-image img {
+    transform: scale(1.05);
+}
+
+.category-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    text-align: center;
+    color: #222;
+    margin: 15px 0;
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .category-page {
+        padding: 40px 20px;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+        padding-top: 50px;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .category-label {
+        font-size: 1rem;
+        margin: 12px 0;
+    }
+}
+
+/* Mobile specific styling - 2 cards per row */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .category-label {
+        font-size: 0.9rem;
+        margin: 10px 0;
+    }
+} 
+ 

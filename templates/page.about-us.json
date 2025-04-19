@@ -1,0 +1,68 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "about_us": {
+      "type": "brewster-about-us",
+      "blocks": {
+        "paragraph_1": {
+          "type": "paragraph",
+          "settings": {
+            "text": "At Brewster Village Marketplace, we're more than just a neighborhood store — we're a part of the community."
+          }
+        },
+        "paragraph_2": {
+          "type": "paragraph",
+          "settings": {
+            "text": "For generations, our charming corner of Brewster has served as a trusted stop for locals and visitors alike. From everyday essentials to special moments shared over a bottle of wine or a handcrafted deli sandwich, we're proud to be woven into the fabric of daily life in our town."
+          }
+        },
+        "paragraph_3": {
+          "type": "paragraph",
+          "settings": {
+            "text": "Our marketplace is a reflection of what we value most: quality, care, and connection. We offer a thoughtfully curated selection of local groceries, craft beer, fine wine, artisanal deli items, and more — each chosen to meet the tastes and needs of our community."
+          }
+        },
+        "paragraph_4": {
+          "type": "paragraph",
+          "settings": {
+            "text": "Walk through our doors and you'll find not only top-shelf products, but also warm conversations, friendly faces, and a genuine love for service. Whether you're grabbing your weekly staples, discovering something new, or just in the mood for something delicious — you'll always feel welcome here."
+          }
+        },
+        "paragraph_5": {
+          "type": "paragraph",
+          "settings": {
+            "text": "Rooted in tradition, guided by quality, and built with pride, Brewster Village Marketplace continues to sail forward — just like the ship on our sign — with purpose, heart, and hospitality."
+          }
+        },
+        "paragraph_6": {
+          "type": "paragraph",
+          "settings": {
+            "text": "We invite you to stop by. Stay a while. And shop like a neighbor."
+          }
+        }
+      },
+      "block_order": [
+        "paragraph_1",
+        "paragraph_2",
+        "paragraph_3",
+        "paragraph_4",
+        "paragraph_5",
+        "paragraph_6"
+      ],
+      "settings": {
+        "heading": "About Us"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "about_us"
+  ]
+} 
+ 

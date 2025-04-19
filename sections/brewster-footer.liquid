@@ -1,0 +1,309 @@
+{{ 'brewster-footer.css' | asset_url | stylesheet_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<footer class="brewster-footer">
+  <div class="brewster-footer__top">
+    <div class="footer-container">
+      <div class="footer-logo-area">
+        <a href="/" class="footer-logo">
+          {% if section.settings.footer_logo != blank %}
+            <img 
+              src="{{ section.settings.footer_logo | image_url: width: 200 }}"
+              alt="{{ shop.name }}"
+              width="{{ section.settings.footer_logo.width }}"
+              height="{{ section.settings.footer_logo.height }}"
+              loading="lazy"
+            >
+          {% else %}
+            <span class="footer-logo-text">BREWSTER VILLAGE<br>MARKETPLACE</span>
+          {% endif %}
+        </a>
+        
+        {% if section.settings.footer_tagline != blank %}
+          <p class="footer-tagline">{{ section.settings.footer_tagline }}</p>
+        {% endif %}
+      </div>
+      
+      <div class="footer-columns">
+        <div class="footer-column">
+          <h3 class="footer-heading">{{ section.settings.quick_links_heading }}</h3>
+          <ul class="footer-menu">
+            {% for link in section.settings.quick_links_menu.links %}
+              <li class="footer-menu-item">
+                <a href="{{ link.url }}" class="footer-link">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-heading">{{ section.settings.our_store_heading }}</h3>
+          <div class="footer-store-info">
+            {% if section.settings.store_address != blank %}
+              <p class="footer-info-item">{{ section.settings.store_address }}</p>
+            {% endif %}
+            
+            {% if section.settings.store_phone != blank %}
+              <p class="footer-info-item">
+                <a href="tel:{{ section.settings.store_phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')' }}" class="footer-link footer-phone">
+                  {{ section.settings.store_phone }}
+                </a>
+              </p>
+            {% endif %}
+            
+            {% if section.settings.store_email != blank %}
+              <p class="footer-info-item">
+                <a href="mailto:{{ section.settings.store_email }}" class="footer-link footer-email">
+                  {{ section.settings.store_email }}
+                </a>
+              </p>
+            {% endif %}
+            
+            {% if section.settings.show_map %}
+              <p class="footer-info-item map-container">
+                <a href="https://maps.google.com/?q={{ section.settings.store_address | url_encode }}" target="_blank" class="map-link">
+                  <span class="map-icon">📍</span> Get Directions
+                </a>
+              </p>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-heading">{{ section.settings.hours_heading }}</h3>
+          <div class="footer-hours">
+            {% if section.settings.monday_hours != blank %}
+              <div class="footer-hours-item">
+                <span class="hours-day">Monday - Saturday</span>
+                <span class="hours-time">{{ section.settings.monday_hours }}</span>
+              </div>
+            {% endif %}
+            
+            {% if section.settings.sunday_hours != blank %}
+              <div class="footer-hours-item">
+                <span class="hours-day">Sunday</span>
+                <span class="hours-time">{{ section.settings.sunday_hours }}</span>
+              </div>
+            {% endif %}
+            
+            {% if section.settings.holiday_hours != blank %}
+              <div class="footer-hours-item holiday">
+                <span class="hours-day">{{ section.settings.holiday_name }}</span>
+                <span class="hours-time">{{ section.settings.holiday_hours }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-heading">{{ section.settings.connect_heading }}</h3>
+          <div class="footer-connect-info">
+            <p class="footer-info-item">{{ section.settings.connect_text }}</p>
+            
+            {% if section.settings.connect_phone != blank %}
+              <p class="footer-info-item">
+                <a href="tel:{{ section.settings.connect_phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')' }}" class="footer-link footer-phone">
+                  {{ section.settings.connect_phone }}
+                </a>
+              </p>
+            {% endif %}
+            
+            {% if section.settings.connect_email != blank %}
+              <p class="footer-info-item">
+                <a href="mailto:{{ section.settings.connect_email }}" class="footer-link footer-email">
+                  {{ section.settings.connect_email }}
+                </a>
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="brewster-footer__bottom">
+    <div class="footer-container">
+      <div class="footer-copyright">
+        <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+      </div>
+      
+      {% if section.settings.show_payment_icons %}
+        <div class="footer-payment">
+          <ul class="payment-icons">
+            {%- for type in shop.enabled_payment_types -%}
+              <li class="payment-icon">
+                {{ type | payment_type_svg_tag: class: 'icon' }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Brewster Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer Logo"
+    },
+    {
+      "type": "text",
+      "id": "footer_tagline",
+      "label": "Footer Tagline",
+      "default": "Your Local Spot for Beer, Wine, Deli & More"
+    },
+    {
+      "type": "header",
+      "content": "Quick Links"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_heading",
+      "label": "Quick Links Heading",
+      "default": "Quick Links"
+    },
+    {
+      "type": "link_list",
+      "id": "quick_links_menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Store Information"
+    },
+    {
+      "type": "text",
+      "id": "our_store_heading",
+      "label": "Store Heading",
+      "default": "Our Store"
+    },
+    {
+      "type": "text",
+      "id": "store_address",
+      "label": "Address",
+      "default": "2625 Main St, Brewster, MA 02631"
+    },
+    {
+      "type": "text",
+      "id": "store_phone",
+      "label": "Phone",
+      "default": "(555) 123-4567"
+    },
+    {
+      "type": "text",
+      "id": "store_email",
+      "label": "Email",
+      "default": "hello@brewstervillage.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "Show Map Link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Store Hours"
+    },
+    {
+      "type": "text",
+      "id": "hours_heading",
+      "label": "Hours Heading",
+      "default": "Store Hours"
+    },
+    {
+      "type": "text",
+      "id": "monday_hours",
+      "label": "Monday - Saturday",
+      "default": "9:00 AM - 9:00 PM"
+    },
+    {
+      "type": "text",
+      "id": "sunday_hours",
+      "label": "Sunday",
+      "default": "10:00 AM - 6:00 PM"
+    },
+    {
+      "type": "text",
+      "id": "holiday_name",
+      "label": "Special Hours Label",
+      "default": "Holidays",
+      "info": "Leave blank to hide"
+    },
+    {
+      "type": "text",
+      "id": "holiday_hours",
+      "label": "Holiday Hours",
+      "default": "Hours may vary"
+    },
+    {
+      "type": "header",
+      "content": "Connect With Us"
+    },
+    {
+      "type": "text",
+      "id": "connect_heading",
+      "label": "Connect Heading",
+      "default": "Connect With Us"
+    },
+    {
+      "type": "textarea",
+      "id": "connect_text",
+      "label": "Connect Text",
+      "default": "Have questions or need assistance? We're here to help! Reach out to our friendly team."
+    },
+    {
+      "type": "text",
+      "id": "connect_phone",
+      "label": "Connect Phone",
+      "default": "(555) 123-4567"
+    },
+    {
+      "type": "text",
+      "id": "connect_email",
+      "label": "Connect Email",
+      "default": "contact@brewstervillage.com"
+    },
+    {
+      "type": "header",
+      "content": "Footer Bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show Payment Icons",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brewster Footer",
+      "settings": {
+        "footer_tagline": "Your Local Spot for Beer, Wine, Deli & More",
+        "quick_links_heading": "Quick Links",
+        "our_store_heading": "Our Store",
+        "store_address": "2625 Main St, Brewster, MA 02631",
+        "store_phone": "(555) 123-4567",
+        "store_email": "hello@brewstervillage.com",
+        "show_map": true,
+        "hours_heading": "Store Hours",
+        "monday_hours": "9:00 AM - 9:00 PM",
+        "sunday_hours": "10:00 AM - 6:00 PM",
+        "holiday_name": "Holidays",
+        "holiday_hours": "Hours may vary",
+        "connect_heading": "Connect With Us",
+        "connect_text": "Have questions or need assistance? We're here to help! Reach out to our friendly team.",
+        "connect_phone": "(555) 123-4567",
+        "connect_email": "contact@brewstervillage.com",
+        "show_payment_icons": true
+      }
+    }
+  ]
+}
+{% endschema %} 

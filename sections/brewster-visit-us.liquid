@@ -1,0 +1,183 @@
+{{ 'brewster-visit-us.css' | asset_url | stylesheet_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<section class="contact-visit section" id="visit_us">
+  <h2 class="visit-heading">{{ section.settings.heading }}</h2>
+  
+  <div class="visit-grid">
+    <div class="store-info">
+      <div class="info-block">
+        <h3 class="info-heading">Store Hours</h3>
+        <div class="hours-grid">
+          <div class="day-time">
+            <span class="day">Monday - Saturday</span>
+            <span class="time">{{ section.settings.monday_hours }}</span>
+          </div>
+          <div class="day-time">
+            <span class="day">Sunday</span>
+            <span class="time">{{ section.settings.sunday_hours }}</span>
+          </div>
+          {% if section.settings.holiday_hours != blank %}
+          <div class="day-time holiday">
+            <span class="day">{{ section.settings.holiday_name }}</span>
+            <span class="time">{{ section.settings.holiday_hours }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="info-block">
+        <h3 class="info-heading">Address</h3>
+        <p class="address-text">{{ section.settings.address_line1 }}<br>
+        {{ section.settings.address_line2 }}</p>
+        
+        {% if section.settings.show_map %}
+        <div class="map-container">
+          <a href="https://maps.google.com/?q={{ section.settings.address_line1 | url_encode }},{{ section.settings.address_line2 | url_encode }}" target="_blank" class="map-link">
+            <span class="map-icon">📍</span> View on Map
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      
+      <div class="info-block">
+        <h3 class="info-heading">Contact</h3>
+        <p class="phone-number">
+          <a href="tel:{{ section.settings.phone_number | remove: ' ' | remove: '-' | remove: '(' | remove: ')' }}">
+            {{ section.settings.phone_number }}
+          </a>
+        </p>
+        {% if section.settings.email != blank %}
+        <p class="email">
+          <a href="mailto:{{ section.settings.email }}">
+            {{ section.settings.email }}
+          </a>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="contact-form">
+      <h3 class="form-heading">{{ section.settings.form_heading }}</h3>
+      
+      <form action="/contact#contact_form" method="post" id="contact_form" accept-charset="UTF-8" class="contact-form">
+        <input type="hidden" name="form_type" value="contact">
+        <input type="hidden" name="utf8" value="✓">
+        
+        <div class="form-field">
+          <input type="text" id="contact_name" name="contact[name]" placeholder="Name" required>
+        </div>
+        
+        <div class="form-field">
+          <input type="email" id="contact_email" name="contact[email]" placeholder="Email" required>
+        </div>
+        
+        <div class="form-field">
+          <textarea id="contact_message" name="contact[body]" placeholder="Message" rows="4" required></textarea>
+        </div>
+        
+        <div class="form-submit">
+          <button type="submit" class="submit-button">{{ section.settings.button_text }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Visit Us",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Visit Us",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "monday_hours",
+      "default": "9:00 AM - 9:00 PM",
+      "label": "Weekday Hours"
+    },
+    {
+      "type": "text",
+      "id": "sunday_hours",
+      "default": "10:00 AM - 6:00 PM",
+      "label": "Sunday Hours"
+    },
+    {
+      "type": "text",
+      "id": "holiday_name",
+      "label": "Special Hours Label",
+      "info": "Leave blank to hide special hours"
+    },
+    {
+      "type": "text",
+      "id": "holiday_hours",
+      "label": "Special Hours"
+    },
+    {
+      "type": "text",
+      "id": "address_line1",
+      "default": "2625 Main St",
+      "label": "Address Line 1"
+    },
+    {
+      "type": "text",
+      "id": "address_line2",
+      "default": "Brewster, MA 02631",
+      "label": "Address Line 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "default": true,
+      "label": "Show Map Link"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "default": "(555) 123-4567",
+      "label": "Phone Number"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "default": "info@brewstermarket.com",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "default": "Contact Us",
+      "label": "Form Heading"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Send Message",
+      "label": "Button Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Visit Us",
+      "settings": {
+        "heading": "Visit Us",
+        "monday_hours": "9:00 AM - 9:00 PM",
+        "sunday_hours": "10:00 AM - 6:00 PM",
+        "address_line1": "2625 Main St",
+        "address_line2": "Brewster, MA 02631",
+        "show_map": true,
+        "phone_number": "(555) 123-4567",
+        "email": "info@brewstermarket.com",
+        "form_heading": "Contact Us",
+        "button_text": "Send Message"
+      }
+    }
+  ]
+}
+{% endschema %} 

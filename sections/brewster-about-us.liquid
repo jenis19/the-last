@@ -1,0 +1,170 @@
+{{ 'brewster-about-us.css' | asset_url | stylesheet_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<section class="section about-us-section" id="about_us">
+  <div class="about-image-block">
+    {%- if section.settings.image != blank -%}
+      <img
+        srcset="{{ section.settings.image | image_url: width: 600 }} 600w,
+                {{ section.settings.image | image_url: width: 800 }} 800w,
+                {{ section.settings.image | image_url: width: 1200 }} 1200w"
+        src="{{ section.settings.image | image_url: width: 800 }}"
+        sizes="(min-width: 768px) 50vw, 100vw"
+        alt="{{ section.settings.image.alt | escape }}"
+        loading="lazy"
+        class="about-image"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: 'about-image placeholder' }}
+    {%- endif -%}
+    
+    {% if section.settings.image_caption != blank %}
+      <div class="image-caption">{{ section.settings.image_caption }}</div>
+    {% endif %}
+  </div>
+  
+  <div class="about-text-block">
+    <h2 class="about-heading">{{ section.settings.heading }}</h2>
+    
+    <div class="about-text-content">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'paragraph' -%}
+            <p class="about-text">{{ block.settings.text }}</p>
+          {%- when 'signature' -%}
+            <div class="about-signature">
+              <p class="signature-text">{{ block.settings.signature_text }}</p>
+              {% if block.settings.signature_name != blank %}
+                <p class="signature-name">— {{ block.settings.signature_name }}</p>
+              {% endif %}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+    
+    {% if section.settings.show_cta %}
+      <div class="about-cta">
+        <a href="{{ section.settings.cta_link }}" class="about-cta-button">{{ section.settings.cta_text }}</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Us",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_caption",
+      "label": "Image Caption"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "About Us",
+      "label": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "default": false,
+      "label": "Show Call-to-Action Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "Learn More",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "default": "/pages/about",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraph",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Share your story with your customers"
+        }
+      ]
+    },
+    {
+      "type": "signature",
+      "name": "Signature",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "signature_text",
+          "label": "Signature Text",
+          "default": "We invite you to stop by. Stay a while. And shop like a neighbor."
+        },
+        {
+          "type": "text",
+          "id": "signature_name",
+          "label": "Signature Name",
+          "default": "The Brewster Village Team"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us",
+      "settings": {
+        "heading": "About Us"
+      },
+      "blocks": [
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "At Brewster Village Marketplace, we're more than just a neighborhood store — we're a part of the community."
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "For generations, our charming corner of Brewster has served as a trusted stop for locals and visitors alike. From everyday essentials to special moments shared over a bottle of wine or a handcrafted deli sandwich, we're proud to be woven into the fabric of daily life in our town."
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "Our marketplace is a reflection of what we value most: quality, care, and connection. We offer a thoughtfully curated selection of local groceries, craft beer, fine wine, artisanal deli items, and more — each chosen to meet the tastes and needs of our community."
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "Walk through our doors and you'll find not only top-shelf products, but also warm conversations, friendly faces, and a genuine love for service. Whether you're grabbing your weekly staples, discovering something new, or just in the mood for something delicious — you'll always feel welcome here."
+          }
+        },
+        {
+          "type": "signature",
+          "settings": {
+            "signature_text": "Rooted in tradition, guided by quality, and built with pride, we invite you to shop like a neighbor.",
+            "signature_name": "The Brewster Village Team"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 

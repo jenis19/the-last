@@ -1,0 +1,120 @@
+---
+layout: default
+---
+
+<div class="page-width page-width--narrow section-{{ section.id }}-padding">
+  <div class="about-page">
+    <h1 class="about-title">About Us</h1>
+    
+    <div class="about-content">
+      <p>At Brewster Village Marketplace, we're more than just a neighborhood store — we're a part of the community.</p>
+      
+      <p>For generations, our charming corner of Brewster has served as a trusted stop for locals and visitors alike. From everyday essentials to special moments shared over a bottle of wine or a handcrafted deli sandwich, we're proud to be woven into the fabric of daily life in our town.</p>
+      
+      <p>Our marketplace is a reflection of what we value most: quality, care, and connection. We offer a thoughtfully curated selection of local groceries, craft beer, fine wine, artisanal deli items, and more — each chosen to meet the tastes and needs of our community.</p>
+      
+      <p>Walk through our doors and you'll find not only top-shelf products, but also warm conversations, friendly faces, and a genuine love for service. Whether you're grabbing your weekly staples, discovering something new, or just in the mood for something delicious — you'll always feel welcome here.</p>
+    </div>
+    
+    <div class="about-image">
+      <img src="{{ 'storefront.jpg' | asset_url }}" alt="Brewster Village Marketplace Storefront" loading="lazy">
+    </div>
+    
+    <div class="about-team">
+      <h2>Our Team</h2>
+      <p>Our dedicated team brings years of experience in specialty foods, beverages, and customer service. We're passionate about what we do and committed to creating a welcoming shopping experience for everyone who visits.</p>
+    </div>
+    
+    <div class="about-hours">
+      <h2>Store Hours</h2>
+      <ul>
+        <li><strong>Monday - Friday:</strong> 8:00am - 8:00pm</li>
+        <li><strong>Saturday:</strong> 9:00am - 7:00pm</li>
+        <li><strong>Sunday:</strong> 10:00am - 6:00pm</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .about-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+  }
+  
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .about-content {
+    margin-bottom: 50px;
+  }
+  
+  .about-content p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  
+  .about-image {
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 30px 0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  }
+  
+  .about-image img {
+    width: 100%;
+    display: block;
+  }
+  
+  .about-team, .about-hours {
+    margin: 30px 0;
+  }
+  
+  .about-team h2, .about-hours h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #222;
+  }
+  
+  .about-hours ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .about-hours li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  @media screen and (max-width: 767px) {
+    .about-page {
+      padding: 40px 15px;
+    }
+    
+    .about-title {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+    }
+    
+    .about-content p {
+      font-size: 1rem;
+    }
+    
+    .about-team h2, .about-hours h2 {
+      font-size: 1.6rem;
+    }
+    
+    .about-hours li {
+      font-size: 1rem;
+    }
+  }
+</style> 

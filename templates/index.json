@@ -1,0 +1,159 @@
+{
+  "sections": {
+    "brewster_hero": {
+      "type": "brewster-hero",
+      "settings": {
+        "heading": "Welcome to Brewster Village Marketplace",
+        "subheading": "Your Local Spot for Beer, Wine, Deli & More",
+        "button_label_1": "Shop Now",
+        "button_link_1": "/collections/all",
+        "button_label_2": "View Deli Menu",
+        "button_link_2": "/pages/deli"
+      }
+    },
+    "product_categories": {
+      "type": "brewster-product-grid",
+      "blocks": {
+        "category_1": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Beer",
+            "category_link": "/collections/beer"
+          }
+        },
+        "category_2": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Rum",
+            "category_link": "/collections/rum"
+          }
+        },
+        "category_3": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Wine",
+            "category_link": "/collections/wine"
+          }
+        },
+        "category_4": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Whisky",
+            "category_link": "/collections/whisky"
+          }
+        },
+        "category_5": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Vodka",
+            "category_link": "/collections/vodka"
+          }
+        },
+        "category_6": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Tequila",
+            "category_link": "/collections/tequila"
+          }
+        },
+        "category_7": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Deli",
+            "category_link": "/collections/deli"
+          }
+        },
+        "category_8": {
+          "type": "category_item",
+          "settings": {
+            "category_name": "Deli Sandwiches",
+            "category_link": "/collections/deli-sandwiches"
+          }
+        }
+      },
+      "block_order": [
+        "category_1", 
+        "category_2", 
+        "category_3", 
+        "category_4",
+        "category_5", 
+        "category_6", 
+        "category_7", 
+        "category_8"
+      ],
+      "settings": {
+        "title": "Explore Our Categories"
+      }
+    },
+    "featured_products": {
+      "type": "brewster-product-page",
+      "settings": {
+        "title": "Shop Our Products"
+      }
+    },
+    "top_sellers": {
+      "type": "brewster-top-sellers",
+      "settings": {
+        "title": "Top Sellers",
+        "collection": "all"
+      }
+    },
+    "about_us": {
+      "type": "brewster-about-us",
+      "blocks": {
+        "paragraph_1": {
+          "type": "paragraph",
+          "settings": {
+            "text": "At Brewster Village Marketplace, we're more than just a neighborhood store — we're a part of the community."
+          }
+        },
+        "paragraph_2": {
+          "type": "paragraph",
+          "settings": {
+            "text": "For generations, our charming corner of Brewster has served as a trusted stop for locals and visitors alike. From everyday essentials to special moments shared over a bottle of wine or a handcrafted deli sandwich, we're proud to be woven into the fabric of daily life in our town."
+          }
+        },
+        "paragraph_3": {
+          "type": "paragraph",
+          "settings": {
+            "text": "Our marketplace is a reflection of what we value most: quality, care, and connection. We offer a thoughtfully curated selection of local groceries, craft beer, fine wine, artisanal deli items, and more — each chosen to meet the tastes and needs of our community."
+          }
+        },
+        "paragraph_4": {
+          "type": "paragraph",
+          "settings": {
+            "text": "Walk through our doors and you'll find not only top-shelf products, but also warm conversations, friendly faces, and a genuine love for service. Whether you're grabbing your weekly staples, discovering something new, or just in the mood for something delicious — you'll always feel welcome here."
+          }
+        },
+        "signature": {
+          "type": "signature",
+          "settings": {
+            "signature_text": "Rooted in tradition, guided by quality, and built with pride, we invite you to shop like a neighbor.",
+            "signature_name": "The Brewster Village Team"
+          }
+        }
+      },
+      "block_order": [
+        "paragraph_1",
+        "paragraph_2",
+        "paragraph_3",
+        "paragraph_4",
+        "signature"
+      ],
+      "settings": {
+        "heading": "About Us",
+        "image_caption": "Our marketplace on Main Street, Brewster",
+        "show_cta": true,
+        "cta_text": "Learn More About Us",
+        "cta_link": "/pages/about"
+      }
+    }
+  },
+  "order": [
+    "brewster_hero",
+    "product_categories",
+    "featured_products",
+    "top_sellers",
+    "about_us"
+  ]
+}
